@@ -5,7 +5,9 @@ Config.debug = false
 Config.useOxInventory = GetResourceState('ox_inventory'):find('start')
 
 Config.clothingScript = 'illenium-appearance' -- 'illenium-appearance', 'fivem-appearance', 'core' or false -- to disable
-Config.emsJobs = { "ambulance", "ems" }
+Config.emsJobs = { "ambulance", "ems", "privateems" }
+Config.Publicems = { "ambulance", "ems" }
+Config.privateems = { "privateems" }
 Config.respawnTime = 0                        -- in minutes
 Config.waitTimeForNewCall = 5                 -- minutes
 
@@ -24,7 +26,7 @@ Config.tabletItem = "emstablet"
 
 Config.helpCommand = "911"
 Config.removeItemsOnRespawn = true
-Config.keepItemsOnRespawn = { "money", "WEAPON_PISTOL" } -- items that will not be removed when respawed (works only when Config.RemoveItemsOnRespawn is true)
+Config.keepItemsOnRespawn = { "money"} -- items that will not be removed when respawed (works only when Config.RemoveItemsOnRespawn is true)
 
 Config.baseInjuryReward = 150
 Config.reviveReward = 700

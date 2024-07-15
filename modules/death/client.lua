@@ -210,8 +210,13 @@ local function initPlayerDeath(logged_dead)
                     createDistressCall()
                 end
 
+                if IsControlJustPressed(0, 47) then
+                    createprivateCall()
+                end
+
+
                 if GetGameTimer() - deathTime >= time then
-                    EnableControlAction(0, 47, true)
+                    EnableControlAction(0, 46, true)
 
                     utils.drawTextFrame({
                         x = 0.5,

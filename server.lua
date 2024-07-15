@@ -1,6 +1,6 @@
 player               = {}
 distressCalls        = {}
-local emsJobs        = lib.load("config").emsJobs
+local emsJobs        = lib.load("config").Publicems
 local useOxInventory = lib.load("config").useOxInventory
 local ox_inventory   = useOxInventory and exports.ox_inventory
 
@@ -72,11 +72,36 @@ RegisterNetEvent("ars_ambulancejob:createDistressCall", function(data)
     for i = 1, #players do
         local id = tonumber(players[i])
 
-        if Framework.hasJob(id, emsJobs) then
+        if Framework.hasJob(id, Publicems) then
             TriggerClientEvent("ars_ambulancejob:createDistressCall", id, playerName)
         end
     end
 end)
+
+RegisterNetEvent("ars_ambulancejob:createPrivateCall", function(data)
+    local source = source
+    if not source or source < 1 then return end
+
+    local playerName = Framework.getPlayerName(source)
+
+    distressCalls[#distressCalls + 1] = {
+        msg = data.msg,
+        gps = data.gps,
+        location = data.location,
+        name = playerName
+    }
+
+    local players = GetPlayers()
+
+    for i = 1, #players do
+        local id = tonumber(players[i])
+
+        if Framework.hasJob(id, privateems) then
+            TriggerClientEvent("ars_ambulancejob:createPrivateCall", id, playerName)
+        end
+    end
+end)
+
 
 RegisterNetEvent("ars_ambulancejob:callCompleted", function(call)
     for i = #distressCalls, 1, -1 do

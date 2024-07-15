@@ -6,7 +6,7 @@ local IsControlJustReleased = IsControlJustReleased
 local CreateThread          = CreateThread
 
 local hospitals             = lib.load("data.hospitals")
-local emsJobs               = lib.load("config").emsJobs
+local emsJobs               = lib.load("config").Publicems
 
 local function createStashes()
     for index, hospital in pairs(hospitals) do

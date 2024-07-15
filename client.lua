@@ -6,7 +6,7 @@ player                = {}
 player.injuries       = {}
 
 local hospitals       = lib.load("data.hospitals")
-local emsJobs         = lib.load("config").emsJobs
+local emsJobs         = lib.load("config").Publicems
 local clothingScript  = lib.load("config").clothingScript
 local debug           = lib.load("config").debug
 local function createZones()

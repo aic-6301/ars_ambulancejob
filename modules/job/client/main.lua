@@ -116,6 +116,7 @@ end
 
 local timeForNewCall = lib.load("config").waitTimeForNewCall
 local sendDistressCall = lib.load("config").sendDistressCall
+local sendprivemsCall = lib.load("config").sendDistressCall
 function createDistressCall()
     if player.distressCallTime then
         local currentTime = GetGameTimer()
@@ -152,12 +153,49 @@ function createDistressCall()
     player.distressCallTime = GetGameTimer()
 end
 
+function createprivateCall()
+    if player.sendprivemsCall then
+        local currentTime = GetGameTimer()
+        utils.debug(currentTime - player.sendprivemsCall, 60000 * timeForNewCall)
+        if currentTime - player.sendprivemsCall < 60000 * timeForNewCall then
+            return utils.showNotification(
+                locale("distress_call_in_cooldown"))
+        end
+    end
+
+    local input = lib.inputDialog(locale("distress_call_form_title"), {
+        { type = 'input', label = locale("distress_call_form_label"), description = locale("privems_call_form_desc"), required = true },
+    })
+    if not input then return end
+
+    local msg = input[1]
+
+
+    sendDistressCall(msg)
+
+    local data = {}
+    local playerCoords = cache.coords or GetEntityCoords(cache.ped)
+
+    local current, crossing = GetStreetNameAtCoord(playerCoords.x, playerCoords.y, playerCoords.z)
+
+    data.msg = msg
+    data.gps = playerCoords
+    data.location = GetStreetNameFromHashKey(current)
+
+    TriggerServerEvent("ars_ambulancejob:createPrivateCall", data)
+
+
+
+    player.sendprivemsCall = GetGameTimer()
+end
+
 local helpCommandName = lib.load("config").helpCommand
 
 exports("createDistressCall", createDistressCall)
 RegisterCommand(helpCommandName, createDistressCall)
 
-local emsJobs = lib.load("config").emsJobs
+local emsJobs = lib.load("config").Publicems
+local privateems = lib.load("config").privateems
 
 function openDistressCalls()
     if not Framework.hasJob(emsJobs) then return end
@@ -371,6 +409,29 @@ end)
 
 RegisterNetEvent("ars_ambulancejob:createDistressCall", function(name)
     if not Framework.hasJob(emsJobs) then return end
+
+    lib.notify({
+        title = locale("notification_new_call_title"),
+        description = (locale("notification_new_call_desc")):format(name),
+        position = 'bottom-right',
+        duration = 8000,
+        style = {
+            backgroundColor = '#1C1C1C',
+            color = '#C1C2C5',
+            borderRadius = '8px',
+            ['.description'] = {
+                fontSize = '16px',
+                color = '#B0B3B8'
+            },
+        },
+        icon = 'fas fa-truck-medical',
+        iconColor = '#FEBD69'
+    })
+    PlaySound(-1, "Event_Start_Text", "GTAO_FM_Events_Soundset")
+end)
+
+RegisterNetEvent("ars_ambulancejob:createprivateCall", function(name)
+    if not Framework.hasJob(privateems) then return end
 
     lib.notify({
         title = locale("notification_new_call_title"),
